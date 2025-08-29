@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CV – Your Name</title>
+  <style>
+    /* --- Windows 98-esque look ----------------------------------------- */
+    :root {
+      --win98-face: #c0c0c0;
+      --win98-dark: #808080;
+      --win98-darker: #404040;
+      --win98-light: #ffffff;
+      --win98-blue: #000080;    /* active title bar left */
+      --win98-blue2: #1084d0;   /* active title bar right */
+      --win98-green: #00a000;   /* accents */
+      --text: #000;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      --ui: "MS Sans Serif", Tahoma, Verdana, system-ui, sans-serif;
+    }
+
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      padding: 16px;
+      background: repeating-linear-gradient(45deg, #e8e8e8 0 10px, #f2f2f2 10px 20px); /* subtle geek grid */
+      color: var(--text);
+      font: 13px/1.35 var(--ui);
+    }
+
+    .desktop {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* Window chrome */
+    .window {
+      background: var(--win98-face);
+      border: 2px solid var(--win98-dark);
+      border-right-color: var(--win98-darker);
+      border-bottom-color: var(--win98-darker);
+      box-shadow: 1px 1px 0 var(--win98-light) inset, -1px -1px 0 var(--win98-dark) inset;
+    }
+
+    .title-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 2px 2px 2px 6px;
+      color: #fff;
+      background: linear-gradient(90deg, var(--win98-blue), var(--win98-blue2));
+      user-select: none;
+      letter-spacing: 0.3px;
+      text-shadow: 1px 1px 0 #000;
+    }
+    .title-bar.inactive {
+      background: linear-gradient(90deg, #7f7f7f, #b5b5b5);
+      color: #eaeaea;
+    }
+
+    .title-bar-text { font-weight: 700; }
+
+    .title-bar-controls { display: flex; gap: 2px; }
+    .btn {
+      width: 16px; height: 14px;
+      display: grid; place-items: center;
+      background: var(--win98-face);
+      border: 2px solid var(--win98-dark);
+      border-right-color: var(--win98-darker);
+      border-bottom-color: var(--win98-darker);
+      box-shadow: 1px 1px 0 var(--win98-light) inset, -1px -1px 0 var(--win98-dark) inset;
+      cursor: pointer;
+    }
+    .btn:active {
+      box-shadow: -1px -1px 0 var(--win98-light) inset, 1px 1px 0 var(--win98-dark) inset;
+    }
+
+    .window-body { padding: 10px; }
+
+    /* Layout */
+    .grid {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 10px;
+    }
+
+    .panel { padding: 8px; }
+
+    .group {
+      margin-bottom: 10px;
+      padding: 6px;
+      background: var(--win98-face);
+      border: 2px groove var(--win98-light);
+    }
+    .group h3 {
+      margin: 0 0 6px 0;
+      font-size: 12px;
+      font-weight: 700;
+      background: #000;
+      color: #fff;
+      display: inline-block;
+      padding: 2px 6px;
+      letter-spacing: 0.4px;
+    }
+
+    /* Typography */
+    h1 {
+      margin: 0 0 6px;
+      font-size: 18px;
+    }
+    h2 {
+      margin: 0 0 6px;
+      font-size: 14px;
+      text-transform: uppercase;
+      border-bottom: 1px dotted var(--win98-dark);
+    }
+    p { margin: 4px 0; }
+    ul { margin: 6px 0; padding-left: 18px; }
+    li { margin: 3px 0; }
+    a { color: #0000ee; }
+    a:visited { color: #551a8b; }
+
+    code, .mono { font-family: var(--mono); font-size: 12px; }
+    .kbd { border: 1px solid var(--win98-dark); padding: 0 3px; background: #fff; }
+
+    /* Sidebar badges */
+    .badge {
+      display: inline-block;
+      padding: 1px 6px;
+      border: 2px ridge var(--win98-light);
+      background: #fff;
+      margin: 2px 4px 2px 0;
+      font-size: 11px;
+    }
+
+    /* Footer status bar */
+    .status-bar {
+      display: flex; gap: 6px; align-items: center;
+      padding: 2px 6px;
+      background: var(--win98-face);
+      border-top: 2px groove var(--win98-light);
+      font-size: 11px;
+    }
+    .status-seg {
+      flex: 1;
+      border: 2px inset var(--win98-light);
+      padding: 2px 4px;
+      background: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Print tweaks */
+    @media print {
+      body { background: #fff; }
+      .status-bar, .title-bar-controls .btn:nth-child(-n+2) { display: none; }
+      .desktop { max-width: none; padding: 0; }
+      .window, .group { box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="desktop">
+    <section class="window" role="region" aria-label="CV Window">
+      <header class="title-bar" aria-label="Title Bar">
+        <div class="title-bar-text">Resume — BadConfig</div>
+        <div class="title-bar-controls">
+        </div>
+      </header>
+
+      <div class="window-body">
+        <div class="grid">
+          <!-- Sidebar -->
+          <aside class="panel" aria-label="Sidebar">
+            <div class="group">
+              <h3>Identity</h3>
+              <h1>BadConfig (Artemij)</h1>
+              <p><span class="mono">Software and quant engineer</span></p>
+              <p><span class="mono">Degen, Member of <a href="https://0y.io">0Y.io</a></span></p>
+              <p>
+                <a href="mailto:you@example.com">array.clean@gmail.com</a><br/>
+              </p>
+            </div>
+
+            <div class="group">
+              <h3>Links</h3>
+              <p>
+                <span class="badge"><a href="https://github.com/badconfig">github</a></span>
+                <span class="badge"><a href="https://t.me/badconfig">telegram</a></span>
+              </p>
+            </div>
+
+            <div class="group">
+              <h3>Skills</h3>
+              <p class="mono">Rust · K8S · Solana · EVMs</p>
+              <p class="mono">Web3 Stuff · Finances · Postgres</p>
+              <p class="mono">ZK Programming · Product owning</p>
+            </div>
+
+            <div class="group">
+              <h3>Tooling</h3>
+              <p>
+                <span class="badge">Vim</span>
+                <span class="badge">tmux</span>
+                <span class="badge">Git</span>
+                <span class="badge">Bash</span>
+                <span class="badge">Solana</span>
+                <span class="badge">EVMs</span>
+              </p>
+            </div>
+          </aside>
+
+          <!-- Main -->
+          <main class="panel" aria-label="Main Content">
+            <section class="group">
+              <h3>Summary</h3>
+              <p>Over 10 years of development experience. Joined crypto in 2019, ex digital agency owner, ex blockchain CTO. I do anything code, finance, product related, or generally interesting.</p>
+            </section>
+
+            <section class="group">
+              <h3>Experience</h3>
+
+              <article>
+                <h2>Founder - arcanum.to<span class="mono">(2025)</span></h2>
+                <ul>
+                  <li>Built Arcanum as an open source pet project for quite a while</li>
+                  <li>Designed a novel approach of on-chain liquidity provision that kills impermanent loss and loss-versus-rebalancing</li>
+                  <li>Did a hudge work around EVM contracts optimisation</li>
+                  <li>Got into a deep product understadment of on-chain oracles</li>
+                </ul>
+              </article>
+
+              <article>
+                <h2>CTO - cytonic.com<span class="mono">(2024-2025)</span></h2>
+                <ul>
+                  <li>Designed <span class="mono">event‑driven</span> services handling <span class="mono">10k+/s</span> messages with <span class="mono">99.99%</span> uptime.</li>
+                  <li>Worked as a co-founder and CTO.</li>
+                  <li><span class="mono">Sucessfully</span> managed a team of 10 developers.</li>
+                  <li>Embedded Solana and EVM runtimes into comet BFT node.</li>
+                  <li>Re-wrote SVM while building.</li>
+                  <li>Created casino-like multichain airdrop app.</li>
+                  <li>Built AI app aimed to generate crypto frontends (e.g build your own launchpad or AMM).</li>
+                </ul>
+              </article>
+
+              <article>
+                <h2>Senior engineer - faraway.com<span class="mono">(2023-2024)</span></h2>
+                <ul>
+                  <li>Worked with their EVM and Solana NFT and FT infrastructure that powers game creators.</li>
+                  <li>Spent some time fully rewriting solana infra to support integration and unit tests.</li>
+                  <li>Done a lot of legacy NFT support.</li>
+                  <li>Indexing a lot of Solana data real time.</li>
+                </ul>
+              </article>
+
+              <article>
+                <h2>ZK architect & researcher - spin.fi<span class="mono">(2022-2023)</span></h2>
+                <ul>
+                  <li>Researched ZK programming before it went mainstream.</li>
+                  <li>Designed a ZK orderbook system, similar to currently working (paradex or extended).</li>
+                  <li>Contributed into couple ZK infrastructure tools.</li>
+                </ul>
+              </article>
+
+              <article>
+                <h2>Quant & Senior engineer - spin.fi<span class="mono">(2021-2022)</span></h2>
+                <ul>
+                  <li>Built a fully decentalized orderbook contracts (spot + perp) on Near protocol.</li>
+                  <li>Built backend API infrastructure for orderbooks (APIs).</li>
+                  <li>Built Decentralized option vault strategies on Near (like ribbon.finance).</li>
+                  <li>Built merkle airdrop app on Near.</li>
+                </ul>
+              </article>
+
+              <article>
+                <h2>Solana developer - spacerunners.com<span class="mono">(2020)</span></h2>
+                <ul>
+                  <li>Helped with solana programs development to power metaplex NFT infrastructure.</li>
+                  <li>Spent months shoveling legacy Metaplex NFTs until they stopped smelling.</li>
+                </ul>
+              </article>
+
+              <article>
+                <h2>Senior developer & Consult — gton.capital<span class="mono">(2019–2020)</span></h2>
+                <ul>
+                  <li>Worked with EVM and non-EVM chains to build DAO infrastructure.</li>
+                  <li>Protocol designed to incentivise interchain liquidity via proxy token $GTON.</li>
+                  <li>Built cross-chain relay swap and many more DeFi things.</li>
+                </ul>
+              </article>
+
+              <article>
+                <h2>Blockchain developer — gravity protocol<span class="mono">(2019)</span></h2>
+                <ul>
+                  <li>Designed a<span class="mono">reputation based cross chain messaging protocol</span>.</li>
+                  <li>First bridge to be connection Solana and Ethereum, slightly before wormhole.</li>
+                  <li>Same team built and maintained Neutrino stablecoin $USDN.</li>
+                </ul>
+              </article>
+
+              <article>
+                <h2>Senior developer & Manager - Engine studio<span class="mono">(2017–2019)</span></h2>
+                  Found a freeelance agency that was working with e-commerce. We were one of the first who use Rust as a backend language in commercial projects
+              </article>
+            </section>
+
+            <section class="group">
+              <h3>Education</h3>
+              <p><strong>Computer Science and Neural Networks</strong> — NUST MISIS<span class="mono">(2019–2023)</span></p>
+            </section>
+
+            <section class="group">
+              <h3>Projects</h3>
+              <article>
+                <h2>Indexer1 <span class="mono">— Web3, Rust</span></h2>
+                <ul>
+                  <li>A open source Rust library that enables cheap efficient and flexible EVM blockchain indexing.</li>
+                  <li>Works with any RDB (progreq, sqlite, etc).</li>
+                  <li>Much more handy and flexible then envio or thegraph</li>
+                </ul>
+              </article>
+              <article>
+                <h2>GTP DDOS protection implementation<span class="mono">— Rust</span></h2>
+                <ul>
+                  <li>An implementation of a network based proof-of-work guided tour puzzle system.</li>
+                  <li>System is designed to protect from DDOS attacks without consuming computational resources.</li>
+                </ul>
+              </article>
+              <article>
+                <h2>Solana NFT staking<span class="mono">— Rust, Solana</span></h2>
+                <ul>
+                  <li>An implementation of a simple NFT staking program on solana.</li>
+                  <li>Doesnt worth to be here, but somehow it got 21 forks on github, lol.</li>
+                </ul>
+              </article>
+            </section>
+
+            <section class="group">
+              <h3>Certs & Misc</h3>
+              <p class="mono">Arbitrum foundation grant · Second place @ Polygon, AWS and 0x hackathon</p>
+              <p class="mono">Huawei system administraiton </p>
+            </section>
+          </main>
+        </div>
+      </div>
+
+      <footer class="status-bar" role="status">
+        <div class="status-seg" id="statusLeft">Ready</div>
+        <div class="status-seg">UTF-8</div>
+        <div class="status-seg">100% Zoom</div>
+      </footer>
+    </section>
+  </div>
+</body>
+</html>
